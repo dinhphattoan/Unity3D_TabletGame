@@ -32,7 +32,10 @@ public class MapInitializeScript : SectorTileManager
         SectorTileManager.tile1 = _tile1;
         SectorTileManager.tile2 = _tile2;
         SectorTileManager.tile3 = _tile3;
+<<<<<<< HEAD
         listTileType.Clear();
+=======
+>>>>>>> 635c24750cba69e253067105a180fe52f510d8c3
         for (int i = 0; i < 50; i++)
         { listTileType.Add(0); }
     }

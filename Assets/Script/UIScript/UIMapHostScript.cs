@@ -78,7 +78,11 @@ public class UIMapHostScript : IUIScript
     }
     public void OnClick_ButtonOk()
     {
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 635c24750cba69e253067105a180fe52f510d8c3
 
     }
 
