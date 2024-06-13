@@ -1,56 +1,72 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Splines;
+using UnityEngine.UI;
 
-public class MapInitializeScript : MonoBehaviour
+public class MapInitializeScript : SectorTileManager
 {
-    [Header("Preload Resources")]
-    //0 for tree light, 1 for tree dark
-    [SerializeField] List<GameObject> listPreloadResources;
-    //Storing all sectors, 0 is normal, 1 is bonus, 2 is fail
-    [SerializeField] List<GameObject> listSectorTile;
+    //Normal tile
+    public GameObject _tile1;
+    //Buffed tile
+    public GameObject _tile2;
+    //Failed tile
+    public GameObject _tile3;
+
+    [SerializeField] SplineContainer splineContainer;
     [Space]
     [Header("Map attributes justifiable")]
-    public Transform startingPoint; //First initial point of the map race
-    public Transform endingPoint;   // Ending point of the map race
-    //Numbers of steps in one map to finish, not including first and final steps
     public float number_of_sector;
+    public List<GameObject> gameObjectTiles = new List<GameObject>();
     //Buff for additional turn
-    public float number_of_bonus;
-    public float number_of_fail;
-    [Space]
-    [Header("Road System Attributes")]
+
+
     //Attributes for road initialization
-    public bool isProtrude;
+    public SplineInstantiate splineInstantiate;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        SectorTileManager.tile1 = _tile1;
+        SectorTileManager.tile2 = _tile2;
+        SectorTileManager.tile3 = _tile3;
+        listTileType.Clear();
+        for (int i = 0; i < 50; i++)
+        { listTileType.Add(0); }
     }
+    /// <summary>
+    /// Need to call when there's a change of numbers of tile type to reupdate all tile, clear all previous tiles and replace the new one
+    /// </summary>
+    /// <param name="prevCount">The previous count from last of update</param>
+    public void InitTiles()
+    {
+        // Create a temporary list to store the new tiles
+        List<GameObject> newTiles = new List<GameObject>();
 
+        foreach (var ob in gameObjectTiles)
+        {
+            Destroy(ob);
+        }
+        gameObjectTiles.Clear();
+        // Iterate over the listTileType and create new tiles
+        for (int i = 0; i < listTileType.Count; i++)
+        {
+            GameObject newTile = Instantiate(listTileType[i] == 0 ? tile1 : listTileType[i] == 1 ? tile2 : tile3, splineContainer.transform);
+            newTile.transform.position = listPlatform[i].transform.position;
+            newTile.SetActive(true);
+            newTiles.Add(newTile);
+        }
+
+        // Clear the existing game object tiles
+        gameObjectTiles.Clear();
+
+        // Add the new tiles to the game object tiles
+        gameObjectTiles.AddRange(newTiles);
+    }
     // Update is called once per frame
     void Update()
     {
-        
     }
-    void InitializeSteps()
-    {
-
-    }
-    /// <summary>
-    /// Generate the map from the given parameters set from player
-    /// </summary>
-    void GenerateMap()
-    {
-        
-    }
-}
-[Serializable]
-public struct Sector
-{
-    public Vector3 location;
-    public int index;
-    public bool isBonus;
-    public bool isFail;
 }

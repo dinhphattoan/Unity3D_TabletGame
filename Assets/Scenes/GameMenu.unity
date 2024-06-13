@@ -297,7 +297,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
         m_MethodName: OnClick_SettingOpen
         m_Mode: 1
         m_Arguments:
@@ -566,8 +566,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: IUIScript, Assembly-CSharp
-        m_MethodName: OnClick_ButtonClick
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
+        m_MethodName: OnClick_HostGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -578,8 +578,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
-        m_MethodName: OnClick_HostGame
+        m_TargetAssemblyTypeName: IUIScript, Assembly-CSharp
+        m_MethodName: OnClick_ButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1629,8 +1629,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: IUIScript, Assembly-CSharp
-        m_MethodName: OnClick_ButtonClick
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
+        m_MethodName: OnClick_SettingClose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1641,8 +1641,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
-        m_MethodName: OnClick_SettingClose
+        m_TargetAssemblyTypeName: IUIScript, Assembly-CSharp
+        m_MethodName: OnClick_ButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundTransistionImage: {fileID: 549365056}
   soundManager: {fileID: 0}
-  maxDistancedelta: 70
+  maxDistancedelta: 30
   clipOnClick: {fileID: 8300000, guid: e77e862899cb0964a87861fb3cdedc24, type: 3}
   clipTransistion: {fileID: 0}
   settingPanelObject: {fileID: 1420899855}
@@ -2176,7 +2176,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
         m_MethodName: OnClick_SaveSetting
         m_Mode: 1
         m_Arguments:
@@ -2928,7 +2928,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 46.2
+  field of view: 41
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3551,7 +3551,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
         m_MethodName: sliderSound_OnValueChange
         m_Mode: 3
         m_Arguments:
@@ -3789,7 +3789,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 778246570}
-        m_TargetAssemblyTypeName: UIMenuEventHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIMenuScript, Assembly-CSharp
         m_MethodName: sliderSound_OnValueChange
         m_Mode: 3
         m_Arguments:
