@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c5f255653ffc40b4b934ed8082def53a, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -59,6 +63,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c5f255653ffc40b4b934ed8082def53a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1975186383280865965}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c5f255653ffc40b4b934ed8082def53a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1123721959179615465}
   m_SourcePrefab: {fileID: 100100000, guid: c5f255653ffc40b4b934ed8082def53a, type: 3}
 --- !u!1 &4844260259965649432 stripped
 GameObject:
@@ -87,3 +94,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 863809488879647416, guid: c5f255653ffc40b4b934ed8082def53a, type: 3}
+--- !u!114 &-1123721959179615465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4844260259965649432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f8184ca305470041b73669630c12e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileIndex: 2

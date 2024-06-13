@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIMenuEventHandler : IUIScript
+public class UIMenuScript : IUIScript
 {
     //Interaction home menu
     [Header("Sound attributes")]
@@ -21,10 +18,6 @@ public class UIMenuEventHandler : IUIScript
     void Start()
     {
         base.Initialize();
-
-
-        LoadSetting();
-        //Initial parameters
 
     }
 
