@@ -1,38 +1,53 @@
 using System;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Unity.Netcode.Transports.UTP;
+using CI.PowerConsole;
 
 public class UIMenuScript : IUIScript
 {
+public Button buttonStartClient;
+public Button buttonStartHost;
     //Interaction home menuu
     [Header("Sound attributes")]
-    public GameObject settingPanelObject; // Menu setting
-
+    [SerializeField]
+    GameObject settingPanelObject; // Menu setting
+    [SerializeField]
+    GameObject hostPanelObject;// Menu host
     [Header("Text objects")]
-    public TextMeshProUGUI musicText;
-    public TextMeshProUGUI sfxText;
-    public Slider musicSlider;
-    public Slider sfcSlider;
+    [SerializeField] TextMeshProUGUI musicText;
+    [SerializeField] TextMeshProUGUI sfxText;
+    [Header("Text Input Object")]
+    [SerializeField] Slider musicSlider;
+    [SerializeField] Slider sfcSlider;
+
+    // Network Manager reference
+    [SerializeField] NetworkManager networkManager;
+
+    //Player Lobby, holding player network gameobject and carry throughout the network scenne
     void Start()
     {
         base.Initialize();
-
     }
 
     void Update()
     {
 
     }
+
     public void OnClick_HostGame()
     {
         this.BackgroundTransistionClose(1);
     }
+
     public void OnClick_NavigateToMenu()
     {
 
     }
+
     private void LoadSetting()
     {
         soundManager.soundAudios[0].volume = SaveSystem.settingData.musicVolume;
@@ -46,6 +61,7 @@ public class UIMenuScript : IUIScript
         }
 
     }
+
     public void sliderSound_OnValueChange(int soundIndex)
     {
         var target = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
@@ -69,11 +85,13 @@ public class UIMenuScript : IUIScript
         LoadSetting();
         this.settingPanelObject.SetActive(false);
     }
+
     public void OnClick_SettingOpen()
     {
         this.settingPanelObject.SetActive(true);
         LoadSetting();
     }
+
     public void OnClick_SaveSetting()
     {
         //Save setting file
