@@ -8,15 +8,15 @@ public class SoundManager : MonoBehaviour
 {
     //Queue of audios added and play in order
     [SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
-    public int currentClipIndex = 0;
-    public Slider soundSlider;
+    [SerializeField] int currentClipIndex = 0;
+    [SerializeField] Slider soundSlider;
     //List of audio available, 1 for music, 2 for sfx sound
     [SerializeField]
     public List<SoundAudio> soundAudios;
     //Transistion speed
-    public float transistionSecondSpeedClose = 1f;
-    public float transistionSecondSpeedOpen = 1f;
-    bool isTransistionProcess =false;
+    float transistionSecondSpeedClose = 1f;
+    float transistionSecondSpeedOpen = 1f;
+    bool isTransistionProcess = false;
     //Transistion counter
     float transistionSecondCounter = 0;
     //Save the previous sound volume set when start transistion the volume
@@ -26,7 +26,7 @@ public class SoundManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     //Play the next song (transistioning), if flag is false then no next song will be played
     public void PlayNextSong(bool flag)
@@ -52,17 +52,16 @@ public class SoundManager : MonoBehaviour
         audioSource.volume = (float)soundAudios[0].volume / 100f;
         audioSource2.volume = (float)soundAudios[1].volume / 100f;
         //Keep playing when sound is stopped
-        if(!audioSource.isPlaying&& isTransistionProcess==false)
+        if (!audioSource.isPlaying && isTransistionProcess == false)
         {
             PlayNextSong(true);
         }
     }
 
 
-    //Start the transistion close and open
     IEnumerator TransistionSound(AudioClip nextAudioClip)
     {
-        isTransistionProcess=true;;
+        isTransistionProcess = true; ;
         transistionSecondCounter = audioSource.volume;
         prevSoundVolume = audioSource.volume;
         while (transistionSecondCounter != 0)
@@ -80,7 +79,7 @@ public class SoundManager : MonoBehaviour
             audioSource.volume = transistionSecondCounter;
             yield return null;
         }
-        isTransistionProcess=false;
+        isTransistionProcess = false;
     }
 
 }

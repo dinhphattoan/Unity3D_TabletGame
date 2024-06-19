@@ -8,6 +8,7 @@ public class UIGameScript : IUIScript
 {
     [Header("UI Reference")]
     [Space]
+        [SerializeField] GameObject gameObjectRawImage;
     [SerializeField] GameObject briefMessageText;
     [SerializeField] GameObject forceInputUI;
     [SerializeField] GameObject rollDicePanel;
@@ -52,7 +53,7 @@ public class UIGameScript : IUIScript
         briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize = frontSize;
         briefMessageText.transform.GetComponent<TextMeshProUGUI>().text = message;
         briefMessageText.gameObject.SetActive(true);
-        yield return new WaitUntil(() => Input.GetMouseButton(0));
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
         briefMessageText.gameObject.SetActive(false);
         briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize = fronttemp;
     }
@@ -127,9 +128,10 @@ public class UIGameScript : IUIScript
     {
         forceDrag = -1;
         mouseDown = mouseUp = Vector3.zero;
+        RectTransform  rect= gameObjectRawImage.GetComponent<RectTransform>();
         while (forceDrag == -1)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) )
             {
                 if (!isMouseDown)
                 {
@@ -157,4 +159,5 @@ public class UIGameScript : IUIScript
             yield return null;
         }
     }
+       
 }

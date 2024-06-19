@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameObjectPlayerScoreBoardPanel; //Scoreboard Panel
     [SerializeField] GameObject gameObjectScoreBoardContent; // Content of the scoreboard
     [SerializeField] GameObject gameObjectScoreBoardPlayerPanel; //Player panel
+
     [Header("In Game System Attributes")]
 
     float force;
@@ -88,7 +89,7 @@ public class GameManager : MonoBehaviour
             }
 
             soundManager.PlaySFX(transistionClip);
-            yield return StartCoroutine(uiGameScript.ClickToContinue("Player " + players[playerIndex].name + " turn!", 70));
+            yield return StartCoroutine(uiGameScript.ClickToContinue("Player " + players[playerIndex].name + " turn!\nPress Space to continue", 40));
             players[playerIndex].turns++;
 
             yield return new WaitForSeconds(1);
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    yield return StartCoroutine(uiGameScript.ShowBriefMessage(diceManager.GetDiceValue().ToString() + "!", 70));
+                    yield return StartCoroutine(uiGameScript.ShowBriefMessage(diceManager.GetDiceValue().ToString(), 100));
                     yield return StartCoroutine(uiGameScript.CloseRollDicePanel());
                     break;
                 }
@@ -121,6 +122,7 @@ public class GameManager : MonoBehaviour
             {
                 soundManager.PlaySFX(FailClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Number steps is too big!", 70));
+                diceManager.ResetPosition();
                 playerIndex++;
                 continue;
             }
@@ -207,6 +209,7 @@ public class GameManager : MonoBehaviour
         gameObjectPlayerScoreBoardPanel.SetActive(true);
         //Sort the player from high to low base on ranking score
         players = players.OrderBy(x => x.rank).ToList();
+        ScoreboardData scoreboardData = new ScoreboardData();
         for (int i = 0; i < players.Count; i++)
         {
             var playerPanel = Instantiate(gameObjectScoreBoardPlayerPanel, gameObjectScoreBoardContent.transform);
@@ -217,8 +220,10 @@ public class GameManager : MonoBehaviour
             playerPanel.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = players[i].buffTimes.ToString();
             playerPanel.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = players[i].failTimes.ToString();
             playerPanel.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+            scoreboardData.AddPlayer(players[i].name, players[i].turns, players[i].buffTimes, players[i].failTimes);
             yield return null;
         }
+        SaveSystem.SaveScoreBoard(scoreboardData);
     }
 
     void ReallocatePlayerModelFigure(int tileIndex, List<Player> listPlayer)

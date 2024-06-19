@@ -16,7 +16,7 @@ public class CameraManager : MonoBehaviour
     Quaternion globalRotation;
     Vector3 globalPosition;
     Vector3 velocity;
-
+    Vector3 prevMouseDown=Vector3.zero;
     private void Start()
     {
         listTransforms.Add(this.transform);
@@ -30,18 +30,18 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (indexSwitcher != -1)
-            if (Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0))
+        {
+            if(prevMouseDown.x<Input.mousePosition.x)
             {
-                if (Input.mousePosition.x < (float)Screen.width / 2f)
-                {
-                    cameraPivot.transform.localRotation= new Quaternion(0, cameraPivot.transform.localRotation.y+ (Time.deltaTime * moveSpeed * 3), 0, 0);
-                }
-                else if (Input.mousePosition.x > (float)Screen.width / 2f)
-                {
-                    cameraPivot.transform.localRotation= new Quaternion(0, cameraPivot.transform.localRotation.y- (Time.deltaTime * moveSpeed * 3), 0, 0);
-                }
+                cameraPivot.transform.Rotate(Vector3.down,3);
             }
+            else if ( prevMouseDown.x > Input.mousePosition.x)
+            {
+                cameraPivot.transform.Rotate(Vector3.up,3);
+            }
+            prevMouseDown=Input.mousePosition;;
+        }
         UpdatePlayerValue();
         ChangeFocus(indexSwitcher);
     }
@@ -58,7 +58,7 @@ public class CameraManager : MonoBehaviour
                     cameraPivot.transform.localRotation = new Quaternion(0, listTransforms[indexSwitcher].rotation.y, 0, 0);
                 }
 
-                Vector3 behindCameraPivot = cameraPivot.transform.position + (-cameraPivot.transform.forward * distanceToTarget);
+                Vector3 behindCameraPivot = cameraPivot.transform.position + (cameraPivot.transform.forward * distanceToTarget);
                 this.transform.position = Vector3.SmoothDamp(this.transform.position, behindCameraPivot + cameraPlayerOffSet, ref velocity, Time.deltaTime * moveSpeed);
                 this.transform.LookAt(listTransforms[indexSwitcher].position);
 

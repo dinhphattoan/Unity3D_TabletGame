@@ -802,21 +802,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ProtocolType: 0
-  m_MaxPacketQueueSize: 128
-  m_MaxPayloadSize: 6144
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
-  ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
-    ServerListenAddress: 127.0.0.1
-  DebugSimulator:
-    PacketDelayMS: 0
-    PacketJitterMS: 0
-    PacketDropRate: 0
 --- !u!114 &284228257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,31 +814,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NetworkConfig:
-    ProtocolVersion: 0
-    NetworkTransport: {fileID: 284228256}
-    PlayerPrefab: {fileID: 734325722335433520, guid: 13773f783589bdc4798dcb3ad1600598, type: 3}
-    Prefabs:
-      NetworkPrefabsLists:
-      - {fileID: 11400000, guid: c8954e7ffcd7b294c9af2ec7be3b8e1d, type: 2}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
-    ConnectionData: 
-    EnableTimeResync: 0
-    TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
-    ForceSamePrefabs: 1
-    RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
-    RpcHashSize: 0
-    LoadSceneTimeOut: 120
-    SpawnTimeout: 10
-    EnableNetworkLogs: 1
-    OldPrefabList: []
-  RunInBackground: 1
-  LogLevel: 1
 --- !u!4 &284228258
 Transform:
   m_ObjectHideFlags: 0
@@ -1143,7 +1103,7 @@ MonoBehaviour:
   soundManager: {fileID: 0}
   maxDistancedelta: 70
   clipOnClick: {fileID: 8300000, guid: e77e862899cb0964a87861fb3cdedc24, type: 3}
-  clipTransistion: {fileID: 0}
+  gameObjectRawImage: {fileID: 875862349}
   briefMessageText: {fileID: 1719968807}
   forceInputUI: {fileID: 2076561767}
   rollDicePanel: {fileID: 875862349}
@@ -1902,7 +1862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2242,10 +2202,10 @@ MonoBehaviour:
   moveSpeed: 15
   cameraPlayerOffSet: {x: 0, y: 15, z: 0}
   cameraPivot: {fileID: 768755029}
-  indexSwitcher: 0
+  distanceToTarget: 32
   game: {fileID: 1786240770}
   listTransforms: []
-  distanceToTarget: 32
+  indexSwitcher: 0
 --- !u!1 &1207789947
 GameObject:
   m_ObjectHideFlags: 0
@@ -3696,8 +3656,6 @@ MonoBehaviour:
     volume: 100
   - name: sfx audio
     volume: 100
-  transistionSecondSpeedClose: 1
-  transistionSecondSpeedOpen: 1
   audioSource: {fileID: 1827691458}
   audioSource2: {fileID: 1827691457}
 --- !u!4 &1827691460

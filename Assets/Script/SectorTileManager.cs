@@ -42,16 +42,7 @@ public class SectorTileManager : MonoBehaviour
     {
         return listPlatform[index];
     }
-    protected static void EvaluateCount()
-    {
-        //Fill all the tile that set to special
-        int trace = 0;
-        foreach (var i in listTileType)
-        {
-            SetTileType(trace++, i);
 
-        }
-    }
     public static void AddNewTileObject(GameObject tileObject)
     {
         if (tileObject.GetComponent<PlatformSectorScript>() != null)

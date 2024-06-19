@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public static class SaveSystem
 {
-    private static SettingData settingData;
+    private static SettingData settingData = new SettingData();
+    private static List<ScoreboardData> scoreboardDatas = new List<ScoreboardData>();
     //Save game setting locally
     public static void SaveSetting(SettingData settingData)
     {
@@ -14,6 +17,38 @@ public static class SaveSystem
         formatter.Serialize(stream, settingData);
         stream.Close();
         LoadSetting();
+    }
+    public static void SaveScoreBoard(ScoreboardData newScoreBoard)
+    {
+        string path = Application.persistentDataPath + "/scoreboard.data";
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream;
+        if (File.Exists(path))
+        {
+
+            stream = new FileStream(path, FileMode.Open);
+            scoreboardDatas = formatter.Deserialize(stream) as List<ScoreboardData>;
+            stream.Close();
+        }
+        scoreboardDatas.Add(newScoreBoard);
+        formatter = new BinaryFormatter();
+        stream = new FileStream(path, FileMode.Create);
+        formatter.Serialize(stream, scoreboardDatas);
+        stream.Close();
+    }
+    public  static List<ScoreboardData> LoadScoreBoard()
+    {
+        string path = Application.persistentDataPath + "/scoreboard.data";
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream;
+        if (File.Exists(path))
+        {
+
+            stream = new FileStream(path, FileMode.Open);
+            scoreboardDatas = formatter.Deserialize(stream) as List<ScoreboardData>;
+            stream.Close();
+        }
+        return scoreboardDatas;
     }
     //Load the saved setting, if save wasn't exist, create and override new default values
     public static void LoadSetting()
@@ -32,6 +67,7 @@ public static class SaveSystem
         }
         else
         {
+            settingData = new SettingData();
             SaveSetting(settingData);
         }
 
@@ -39,7 +75,7 @@ public static class SaveSystem
     //Load Sound setting
     public static void LoadSoundSetting(SoundManager soundManager)
     {
-        if(settingData==null)
+        if (settingData == null)
         {
             LoadSetting();
         }
@@ -51,9 +87,33 @@ public static class SaveSystem
 [System.Serializable]
 public class SettingData
 {
-    public int musicVolume=100;
+    public int musicVolume = 100;
     public int sfxVolume = 100;
-    public bool isMuted= false;
+    public bool isMuted = false;
 
+
+}
+[System.Serializable]
+public class ScoreboardData
+{
+    //Scoreboard info
+    public DateTime dateTime = DateTime.Now;
+    public List<string> playerNameList = new List<string>();
+    public List<int> playerPlace = new List<int>();
+    public List<int> playerTurns = new List<int>();
+    public List<int> playerBuffer = new List<int>();
+    public List<int> playerFailed = new List<int>();
+    public ScoreboardData()
+    {
+
+    }
+    public void AddPlayer(string name, int turn, int buffer, int failed)
+    {
+        playerNameList.Add(name);
+        playerPlace.Add(playerNameList.Count);
+        playerTurns.Add(turn);
+        playerBuffer.Add(buffer);
+        playerFailed.Add(failed);
+    }
 
 }

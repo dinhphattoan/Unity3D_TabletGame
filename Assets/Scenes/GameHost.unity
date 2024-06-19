@@ -4096,9 +4096,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 214985488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8abfe314a56157440b9017cab937b942, type: 3}
+  m_Script: {fileID: 11500000, guid: bbd95c02e9a976a4aab773d500016e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateSpeed: 25
 --- !u!1 &216935000
 GameObject:
   m_ObjectHideFlags: 0
@@ -15861,7 +15862,6 @@ MonoBehaviour:
   soundManager: {fileID: 0}
   maxDistancedelta: 70
   clipOnClick: {fileID: 8300000, guid: e77e862899cb0964a87861fb3cdedc24, type: 3}
-  clipTransistion: {fileID: 0}
   buffColor: {r: 0, g: 0.07144785, b: 1, a: 0.8156863}
   failedColor: {r: 1, g: 0, b: 0, a: 0.80784315}
   keyboardSeperateSpace: 5
@@ -16451,9 +16451,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1238900071}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8abfe314a56157440b9017cab937b942, type: 3}
+  m_Script: {fileID: 11500000, guid: bbd95c02e9a976a4aab773d500016e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateSpeed: 25
 --- !u!1 &1250449238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 54f9d904a55a47b42a3e5deae98ee0f4, type: 3}
@@ -17018,9 +17019,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1266860134}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8abfe314a56157440b9017cab937b942, type: 3}
+  m_Script: {fileID: 11500000, guid: bbd95c02e9a976a4aab773d500016e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateSpeed: 25
 --- !u!1001 &1275940769
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21439,9 +21441,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709539752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8abfe314a56157440b9017cab937b942, type: 3}
+  m_Script: {fileID: 11500000, guid: bbd95c02e9a976a4aab773d500016e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateSpeed: 25
 --- !u!1 &1709831013 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a2d4555b8cd4af45aa59221c6450d1b, type: 3}
@@ -21714,8 +21717,6 @@ MonoBehaviour:
     volume: 100
   - name: sfx audio
     volume: 100
-  transistionSecondSpeedClose: 1
-  transistionSecondSpeedOpen: 1
   audioSource: {fileID: 1726656998}
   audioSource2: {fileID: 1726656997}
 --- !u!4 &1726656996
