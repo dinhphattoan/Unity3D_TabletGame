@@ -46,6 +46,8 @@ public class UIMapHostScript : IUIScript
     //The space between each tile on keyboard
 
     public float seperateSpace = 1f;
+    public AudioClip errorClip; //Error sound
+
 
     void Start()
     {
@@ -244,6 +246,14 @@ public class UIMapHostScript : IUIScript
     }
     public void OnClick_ButtonPlay()
     {
+        foreach (var player in players)
+        {
+            if (player.modelFigureId == -1 || player.name == "")
+            {
+                soundManager.PlaySFX(errorClip);
+                return;
+            }
+        }
         //Save the last editing
         if (playerIdEditing != -1)
         {
@@ -251,7 +261,7 @@ public class UIMapHostScript : IUIScript
             players[playerIdEditing].name = textMeshPlayerNameInput.GetComponent<TMP_InputField>().text;
         }
         mapInitializeScript.SaveMapSetting();
-        mapInitializeScript.players= this.players;
+        mapInitializeScript.players = this.players;
         this.BackgroundTransistionClose(2);
     }
 }

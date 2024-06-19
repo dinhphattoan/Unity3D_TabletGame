@@ -15822,6 +15822,7 @@ MonoBehaviour:
   spotDistance: 5
   rotateSpeed: 5
   seperateSpace: 5
+  errorClip: {fileID: 8300000, guid: f92f7d0a28a7bbb4f8ee0d564a65760f, type: 3}
 --- !u!114 &1192759506
 MonoBehaviour:
   m_ObjectHideFlags: 0

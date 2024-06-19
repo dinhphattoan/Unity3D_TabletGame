@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
             int indexDestination = diceValue + players[playerIndex].tileIndex;
             if (indexDestination > SectorTileManager.listTileType.Count - 1)
             {
+                soundManager.PlaySFX(FailClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Number steps is too big!", 70));
                 continue;
             }
