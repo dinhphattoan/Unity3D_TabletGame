@@ -9,21 +9,21 @@ using UnityEngine.UI;
 
 public class IUIScript : MonoBehaviour
 {
+    [Header("Parent Attributes")]
+    [Space]
     [SerializeField] Image backgroundTransistionImage;
     [SerializeField] protected SoundManager soundManager;
     public float maxDistancedelta = 0.05f;
     protected bool isTrasistioning = false;
     [Space]
     [Header("Preload Sounds")]
-    public AudioClip clipOnClick;
-    public AudioClip clipTransistion;
+    [SerializeField] AudioClip clipOnClick;
+    [SerializeField] AudioClip clipTransistion;
     // Start is called before the first frame update
     protected virtual void Initialize()
     {
         soundManager = FindAnyObjectByType<SoundManager>();
-        SaveSystem.settingData = SaveSystem.LoadSetting();
-        soundManager.soundAudios[0].volume = SaveSystem.settingData.musicVolume;
-        soundManager.soundAudios[1].volume = SaveSystem.settingData.sfxVolume;
+        SaveSystem.LoadSoundSetting(soundManager);
         this.BackgroundTransistionOpen();
     }
 
@@ -93,6 +93,8 @@ public class IUIScript : MonoBehaviour
             else this.backgroundTransistionImage.transform.parent.gameObject.SetActive(false);
         }
     }
+    
+    
     //Event handler
     public void OnClick_ButtonClick()
     {

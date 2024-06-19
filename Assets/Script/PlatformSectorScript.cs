@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PlatformSectorScript : MonoBehaviour
@@ -9,7 +6,7 @@ public class PlatformSectorScript : MonoBehaviour
     public int tileIndex = 0;
     void Awake()
     {
-        SectorTileManager.listPlatform.Add(this.gameObject);
+        SectorTileManager.AddNewTileObject(this.gameObject);
     }
     public int NextTileType()
     {
@@ -18,12 +15,11 @@ public class PlatformSectorScript : MonoBehaviour
         {
             tileIndex = 0;
         }
-        
+
         return tileIndex;
     }
     void OnDestroy()
     {
-        int prevCount = SectorTileManager.listPlatform.Count;
-        SectorTileManager.listPlatform.Remove(this.gameObject);
+        SectorTileManager.RemoveTileObject(this.gameObject);
     }
 }

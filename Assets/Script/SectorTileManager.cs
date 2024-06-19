@@ -9,37 +9,40 @@ public class SectorTileManager : MonoBehaviour
     protected static GameObject tile2;
     protected static GameObject tile3;
     //List of choosen tiles from player
-    public static List<int> listTileType = new List<int>();
+    protected static List<int> listTileType = new List<int>();
 
-    public static List<GameObject> listPlatform = new List<GameObject>();
-    /// <summary>
-    /// Set the tile type, return -1 when change successful, others mean fail at index
-    /// </summary>
-    /// <param name="elementIndex">The index of the tile in the list</param>
-    /// <param name="tileIndex">The tile index that need to be transformed to</param>
-    /// <returns></returns>
-    public static int SetTileType(int elementIndex, int tileIndex)
+    [SerializeField] protected static List<GameObject> listPlatform = new List<GameObject>();
+
+
+
+    public static void SetTileType(int elementIndex, int tileIndex)
     {
+        
         if (elementIndex >= listPlatform.Count)
         {
-            return elementIndex;
+           return;
         }
-        else if (tileIndex == 1)
-        {
-            listPlatform[elementIndex] = tile2;
-        }
-        else if (tileIndex == 2)
-        {
-            listPlatform[elementIndex] = tile3;
-        }
-        return -1;
+        listTileType[elementIndex] = tileIndex;
     }
+
+
     public int CheckIndexOnTile(int elementAt)
     {
         return listPlatform[elementAt].GetComponent<PlatformSectorScript>().tileIndex;
     }
-
-    public static void EvaluateCount()
+    public static int GetTileCount()
+    {
+        return listTileType.Count;
+    }
+    public static int GetTileTypeAtIndex(int index)
+    {
+        return listTileType[index];
+    }
+    public static GameObject GetTileGameObjectAtIndexType(int index)
+    {
+        return listPlatform[index];
+    }
+    protected static void EvaluateCount()
     {
         //Fill all the tile that set to special
         int trace = 0;
@@ -47,6 +50,21 @@ public class SectorTileManager : MonoBehaviour
         {
             SetTileType(trace++, i);
 
+        }
+    }
+    public static void AddNewTileObject(GameObject tileObject)
+    {
+        if (tileObject.GetComponent<PlatformSectorScript>() != null)
+        {
+            listPlatform.Add(tileObject);
+        }
+    }
+    public static void RemoveTileObject(GameObject tileObject)
+    {
+        if (tileObject.GetComponent<PlatformSectorScript>() != null)
+        {
+            int index = listPlatform.IndexOf(tileObject);
+            listPlatform.RemoveAt(index);
         }
     }
 }
