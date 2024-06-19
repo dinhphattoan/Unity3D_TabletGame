@@ -3221,6 +3221,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 7bf9e96c402269047b7d466ff0916fd1, type: 3}
     - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: jumpClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f9dcfa3897d40674098b694700ecec5c, type: 3}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: winnerClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 232d26556e1475d49b5ceb513e17bfb6, type: 3}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
       propertyPath: diceManager
       value: 
       objectReference: {fileID: 1527474740}
@@ -3228,6 +3236,14 @@ PrefabInstance:
       propertyPath: isGamePause
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: finalWinnerClip
+      value: 
+      objectReference: {fileID: 8300000, guid: beee4fd33b767a14aa7ba213e35dab80, type: 3}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: rollDiceSuccess
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a185555d824afe4b947d6f2c822b6ab, type: 3}
     - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
       propertyPath: transistionClip
       value: 

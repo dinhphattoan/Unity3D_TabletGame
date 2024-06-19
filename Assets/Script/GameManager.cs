@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     //Determine the turn order of the players to play the game
     [SerializeField] List<int> TurnOrder = new List<int>(); // Element index is the player id, value are order
     public GameObject gameObjectPlayerScoreBoardPanel; //Scoreboard Panel
-        public GameObject gameObjectScoreBoardContent; // Content of the scoreboard
+    public GameObject gameObjectScoreBoardContent; // Content of the scoreboard
     public GameObject gameObjectScoreBoardPlayerPanel; //Player panel
 
     public bool isGamePause = true;
@@ -33,8 +33,10 @@ public class GameManager : MonoBehaviour
     public AudioClip BuffClip;
     public AudioClip FailClip;
     public AudioClip rollDiceSuccess;
+    public AudioClip jumpClip;
     public List<AudioClip> jumpLevelClip;
     public AudioClip winnerClip;
+    public AudioClip finalWinnerClip;
     public AudioClip transistionClip;
 
     MapInitializeScript mapInitializeScript;
@@ -119,7 +121,7 @@ public class GameManager : MonoBehaviour
 
             }
             //Get the dice result
-            int diceValue = 5;
+            int diceValue = diceManager.GetDiceValue();
             int indexDestination = diceValue + players[playerIndex].tileIndex;
             if (indexDestination > SectorTileManager.listTileType.Count - 1)
             {
@@ -129,20 +131,18 @@ public class GameManager : MonoBehaviour
             int jumpedStep = 0;
             diceManager.ResetPosition();
             //Assign from-to destination
-            while (players[playerIndex].tileIndex != indexDestination )
+            while (players[playerIndex].tileIndex != indexDestination)
             {
+                soundManager.PlaySFX(jumpClip);
                 yield return StartCoroutine(PlayerJumpTileToTile(players[playerIndex], players[playerIndex].tileIndex + 1, jumpedStep++));
-                if(players[playerIndex].tileIndex == SectorTileManager.listTileType.Count - 1)
-                {
-                    break;
-                }
+
             }
             //Check if the player is standing special tile
             //Is at final
-            if (SectorTileManager.listTileType[players[playerIndex].tileIndex] == SectorTileManager.listTileType.Count - 1)
+            if (players[playerIndex].tileIndex == SectorTileManager.listTileType.Count - 1)
             {
                 soundManager.PlaySFX(winnerClip);
-                yield return StartCoroutine(uiGameScript.ShowBriefMessage("Player " + players[playerIndex].name, 80));
+                yield return StartCoroutine(uiGameScript.ShowBriefMessage("Player " + players[playerIndex].name + " Win!", 80));
                 players[playerIndex].isWon = true;
                 players[playerIndex].rank = winnerCount + 1;
                 winnerCount++;
@@ -175,9 +175,8 @@ public class GameManager : MonoBehaviour
 
             //Jump player to tile
         }
-
+        soundManager.PlaySFX(finalWinnerClip);
         yield return StartCoroutine(uiGameScript.ShowBriefMessage("Game Complete!", 70));
-
         yield return StartCoroutine(FinalizeScore());
     }
     IEnumerator PlayerJumpTileToTile(Player player, int tileto, int jumpedStep)
@@ -187,11 +186,16 @@ public class GameManager : MonoBehaviour
         desJumping = new Vector3(desJumping.x, desJumping.y + 5f, desJumping.z);
         mapInitializeScript.endPos = desJumping;
         mapInitializeScript.startRotation = players[playerIndex].modelFigure.transform.rotation;
+        //Get a direction rotation from player to the next tile
+        Vector3 direction = mapInitializeScript.gameObjectTiles[tileto].transform.position - players[playerIndex].modelFigure.transform.position;
+        mapInitializeScript.endRotation = Quaternion.LookRotation(direction);
         soundManager.PlaySFX(jumpLevelClip[jumpedStep++]);
-        mapInitializeScript.endRotation = mapInitializeScript.gameObjectTiles[tileto + 1].transform.rotation;
+
+
         yield return StartCoroutine(
         mapInitializeScript.Slerp(players[playerIndex].modelFigure.transform));
         players[playerIndex].tileIndex = tileto;
+
     }
 
     IEnumerator HandleInputForce()
@@ -219,7 +223,7 @@ public class GameManager : MonoBehaviour
             playerPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].turns.ToString();
             playerPanel.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = players[i].buffTimes.ToString();
             playerPanel.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = players[i].failTimes.ToString();
-            playerPanel.GetComponent<Image>().color = new Color(255,255,255,0);
+            playerPanel.GetComponent<Image>().color = new Color(255, 255, 255, 0);
             yield return null;
         }
     }

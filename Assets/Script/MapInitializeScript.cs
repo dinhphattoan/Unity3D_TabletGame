@@ -105,9 +105,9 @@ public class MapInitializeScript : SectorTileManager
         {
             GetCenter(Vector3.up);
             fracComplete = (Time.time - startTime) / journeyTime;
-            figure.position = Vector3.Slerp(startRelCenter, endRelCenter, fracComplete*2);
+            figure.position = Vector3.Slerp(startRelCenter, endRelCenter, fracComplete*2.5f);
             figure.position += centerPoint;
-            figure.rotation = Quaternion.Slerp(startRotation, endRotation, fracComplete*2);
+            figure.rotation = Quaternion.Slerp(startRotation, endRotation, fracComplete*2.5f);
             yield return null;
         }
 
