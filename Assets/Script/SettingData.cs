@@ -5,9 +5,9 @@ using UnityEngine;
 [Serializable]
 public class SettingData
 {
-    public int musicVolume;
-    public int sfxVolume;
-    public bool isMuted;
+    public int musicVolume = 100;
+    public int sfxVolume = 100;
+    public bool isMuted= false;
 
 
 }

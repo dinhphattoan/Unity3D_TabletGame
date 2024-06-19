@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -23,18 +24,21 @@ public static class SaveSystem
     {
 
         string path = Application.persistentDataPath + "/setting.data";
+        Debug.Log(path);
+        SettingData  settingData = new SettingData();
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
             SettingData data = formatter.Deserialize(stream) as SettingData;
             stream.Close();
-            return data;
+            settingData = data;
+            
         }
         else
         {
-            Debug.LogError("Save file not found in " + path);
-            return null;
+            SaveSetting(settingData);
         }
+        return settingData;
     }
 }
