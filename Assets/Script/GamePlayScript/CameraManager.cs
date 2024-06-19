@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -37,29 +35,25 @@ public class CameraManager : MonoBehaviour
         }
         else if (indexSwitcher == 2)
         {
-            SinglePlayerFocus(gameManager.players[0].modelFigure.transform);
+            SinglePlayerFocus(gameManager.GetPlayerAtIndex(0).modelFigure.transform);
         }
     }
 
     void PlayersFocus()
     {
-        // Calculate the bounds of all player transforms
-        Bounds bounds = new Bounds(gameManager.players[0].modelFigure.transform.position, Vector3.zero);
-        foreach (var player in gameManager.players)
+        Bounds bounds = new Bounds(gameManager.GetPlayerAtIndex(0).modelFigure.transform.position, Vector3.zero);
+        foreach (var player in gameManager.GetAllPlayers())
         {
             bounds.Encapsulate(player.modelFigure.transform.position);
         }
-
-        // Set the camera's position to the center of the bounds
         transform.position = Vector3.Lerp(transform.position, bounds.center + cameraOffSet, smoothSpeed * Time.deltaTime);
 
-        // Set the camera's rotation to look at the center of the bounds
         SmoothLookAt(bounds.center);
 
-        // Adjust the camera's size to fit all players
         Camera camera = GetComponent<Camera>();
-        camera.orthographicSize = bounds.extents.magnitude * 100f; // Adjust the multiplier as needed
+        camera.orthographicSize = bounds.extents.magnitude * 100f; 
     }
+    
     //Make camera travel around the map globaly
     void GlobalFocus()
     {

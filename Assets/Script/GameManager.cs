@@ -8,46 +8,45 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public List<Player> players = new List<Player>();
-    public List<bool> winners = new List<bool>();
+    [SerializeField] List<Player> players = new List<Player>();
+
     [SerializeField] List<GameObject> modelFigures = new List<GameObject>();
     //Determine the turn order of the players to play the game
-    [SerializeField] List<int> TurnOrder = new List<int>(); // Element index is the player id, value are order
-    public GameObject gameObjectPlayerScoreBoardPanel; //Scoreboard Panel
-    public GameObject gameObjectScoreBoardContent; // Content of the scoreboard
-    public GameObject gameObjectScoreBoardPlayerPanel; //Player panel
+    [Header("UI Panels")]
+    [Space]
+    [SerializeField] GameObject gameObjectPlayerScoreBoardPanel; //Scoreboard Panel
+    [SerializeField] GameObject gameObjectScoreBoardContent; // Content of the scoreboard
+    [SerializeField] GameObject gameObjectScoreBoardPlayerPanel; //Player panel
+    [Header("In Game System Attributes")]
 
-    public bool isGamePause = true;
-    public bool nextTurnAwait = false; //True if the game is waiting for the next turn to start
-    public DiceManager diceManager;
-    public float force;
-
-    public int playerIndex = 0; //Player turn
-    public int nexTurnDelaySecond = 1;
-    float nextTurnDelayTimer = 0;
-    UIGameScript uiGameScript;
-    SoundManager soundManager;
-    bool isIntroduced = false;
-    float playerSpeed = 5f;
+    float force;
+    int playerIndex = 0; //Player turn
+    List<bool> winners = new List<bool>();
     [Header("Sound clips")]
-    public AudioClip BuffClip;
-    public AudioClip FailClip;
-    public AudioClip rollDiceSuccess;
-    public AudioClip jumpClip;
-    public List<AudioClip> jumpLevelClip;
-    public AudioClip winnerClip;
-    public AudioClip finalWinnerClip;
-    public AudioClip transistionClip;
+    [Space]
+    [SerializeField] AudioClip BuffClip;
+    [SerializeField] AudioClip FailClip;
+    [SerializeField] AudioClip rollDiceSuccess;
+    [SerializeField] AudioClip jumpClip;
+    [SerializeField] List<AudioClip> jumpLevelClip;
+    [SerializeField] AudioClip winnerClip;
+    [SerializeField] AudioClip finalWinnerClip;
+    [SerializeField] AudioClip transistionClip;
 
+    [Header("Reference scritps")]
+    [Space]
+    [SerializeField] UIGameScript uiGameScript;
+    [SerializeField] SoundManager soundManager;
     MapInitializeScript mapInitializeScript;
+    [SerializeField] DiceManager diceManager;
+
     void Start()
     {
+        //Fetch prev scene script
         mapInitializeScript = FindObjectOfType<MapInitializeScript>();
-        diceManager = FindObjectOfType<DiceManager>();
-        uiGameScript = FindObjectOfType<UIGameScript>();
-        soundManager = FindObjectOfType<SoundManager>();
+
         //Load player data
-        this.players = mapInitializeScript.players;
+        this.players = mapInitializeScript.Players;
         foreach (var player in players)
         {
             player.modelFigure = Instantiate(modelFigures[player.modelFigureId]);
@@ -59,21 +58,13 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameStart());
 
     }
+
+
+
     IEnumerator GameStart()
     {
         yield return StartCoroutine(uiGameScript.ShowBriefMessage("Game Start!", 80));
-        yield return StartCoroutine(TurnOrder_Initialize());
         yield return StartCoroutine(GamePlay());
-    }
-    IEnumerator TurnOrder_Initialize()
-    {
-        int turn = 0;
-        while (TurnOrder.Count < players.Count)
-        {
-            TurnOrder.Add(turn);
-            turn++;
-            yield return null;
-        }
     }
     IEnumerator GamePlay()
     {
@@ -123,7 +114,7 @@ public class GameManager : MonoBehaviour
             //Get the dice result
             int diceValue = diceManager.GetDiceValue();
             int indexDestination = diceValue + players[playerIndex].tileIndex;
-            if (indexDestination > SectorTileManager.listTileType.Count - 1)
+            if (indexDestination > SectorTileManager.GetTileCount() - 1)
             {
                 soundManager.PlaySFX(FailClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Number steps is too big!", 70));
@@ -140,7 +131,7 @@ public class GameManager : MonoBehaviour
             }
             //Check if the player is standing special tile
             //Is at final
-            if (players[playerIndex].tileIndex == SectorTileManager.listTileType.Count - 1)
+            if (players[playerIndex].tileIndex == SectorTileManager.GetTileCount() - 1)
             {
                 soundManager.PlaySFX(winnerClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Player " + players[playerIndex].name + " Win!", 80));
@@ -151,14 +142,14 @@ public class GameManager : MonoBehaviour
             }
             //Buff tile
 
-            if (SectorTileManager.listTileType[players[playerIndex].tileIndex] == 1)
+            if (SectorTileManager.GetTileTypeAtIndex(players[playerIndex].tileIndex) == 1)
             {
                 soundManager.PlaySFX(BuffClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Buff!", 70));
                 players[playerIndex].buffTimes++;
                 continue;
             }
-            while (SectorTileManager.listTileType[players[playerIndex].tileIndex] == 2)
+            while (SectorTileManager.GetTileTypeAtIndex(players[playerIndex].tileIndex) == 2)
             {
                 soundManager.PlaySFX(FailClip);
                 jumpedStep = 0;
@@ -180,21 +171,18 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(uiGameScript.ShowBriefMessage("Game Complete!", 70));
         yield return StartCoroutine(FinalizeScore());
     }
+
     IEnumerator PlayerJumpTileToTile(Player player, int tileto, int jumpedStep)
     {
-        mapInitializeScript.startPos = players[playerIndex].modelFigure.transform.position;
         Vector3 desJumping = mapInitializeScript.gameObjectTiles[tileto].transform.position;
         desJumping = new Vector3(desJumping.x, desJumping.y + 5f, desJumping.z);
-        mapInitializeScript.endPos = desJumping;
-        mapInitializeScript.startRotation = players[playerIndex].modelFigure.transform.rotation;
         //Get a direction rotation from player to the next tile
         Vector3 direction = mapInitializeScript.gameObjectTiles[tileto].transform.position - players[playerIndex].modelFigure.transform.position;
-        mapInitializeScript.endRotation = Quaternion.LookRotation(direction);
         soundManager.PlaySFX(jumpLevelClip[jumpedStep++]);
 
-
         yield return StartCoroutine(
-        mapInitializeScript.Slerp(players[playerIndex].modelFigure.transform));
+        mapInitializeScript.Slerp(players[playerIndex].modelFigure.transform, players[playerIndex].modelFigure.transform.position,
+        new Vector3(desJumping.x, desJumping.y, desJumping.z), players[playerIndex].modelFigure.transform.rotation, Quaternion.LookRotation(direction)));
         players[playerIndex].tileIndex = tileto;
 
     }
@@ -210,6 +198,7 @@ public class GameManager : MonoBehaviour
 
 
     }
+    
     IEnumerator FinalizeScore()
     {
         gameObjectPlayerScoreBoardPanel.SetActive(true);
@@ -228,24 +217,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
-    public int NextTurn()
-    {
-        //If the order haven't determine, go to the next player element
-        if (TurnOrder.Count <= players.Count)
-        {
-            playerIndex++;
 
-        }
-        //If the order have determined, go to the first player follow from other
-        for (int i = 0; i < TurnOrder.Count; i++)
-        {
-            if (TurnOrder[i] - playerIndex == 1)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
     /// <summary>
     /// Start to reallocate the player model figure given when the game start
     /// </summary>
@@ -260,11 +232,19 @@ public class GameManager : MonoBehaviour
             player.modelFigure.transform.position = new Vector3(initialVector.x, initialVector.y + 2f, initialVector.z);
         }
     }
+    public Player GetPlayerAtIndex(int index)
+    {
+        return players[index];
+    }
+    public List<Player> GetAllPlayers()
+    {
+        return players;
+    }
 }
 [Serializable]
 public class Player
 {
-    public string name;
+    public string name = "";
     public int tileIndex;
     public GameObject modelFigure;
     public int modelFigureId = -1;

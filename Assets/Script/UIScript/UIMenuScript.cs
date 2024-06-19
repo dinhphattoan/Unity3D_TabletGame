@@ -1,22 +1,17 @@
 using System;
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Unity.Netcode.Transports.UTP;
-using CI.PowerConsole;
 
 public class UIMenuScript : IUIScript
 {
-public Button buttonStartClient;
-public Button buttonStartHost;
+    [SerializeField] Button buttonStartClient;
+    [SerializeField] Button buttonStartHost;
     //Interaction home menuu
     [Header("Sound attributes")]
-    [SerializeField]
-    GameObject settingPanelObject; // Menu setting
-    [SerializeField]
-    GameObject hostPanelObject;// Menu host
+    [SerializeField] GameObject settingPanelObject; // Menu setting
+    [SerializeField] GameObject hostPanelObject;// Menu host
     [Header("Text objects")]
     [SerializeField] TextMeshProUGUI musicText;
     [SerializeField] TextMeshProUGUI sfxText;
@@ -24,10 +19,7 @@ public Button buttonStartHost;
     [SerializeField] Slider musicSlider;
     [SerializeField] Slider sfcSlider;
 
-    // Network Manager reference
-    [SerializeField] NetworkManager networkManager;
 
-    //Player Lobby, holding player network gameobject and carry throughout the network scenne
     void Start()
     {
         base.Initialize();
@@ -37,6 +29,7 @@ public Button buttonStartHost;
     {
 
     }
+
 
     public void OnClick_HostGame()
     {
@@ -50,14 +43,13 @@ public Button buttonStartHost;
 
     private void LoadSetting()
     {
-        soundManager.soundAudios[0].volume = SaveSystem.settingData.musicVolume;
-        soundManager.soundAudios[1].volume = SaveSystem.settingData.sfxVolume;
+        SaveSystem.LoadSoundSetting(soundManager);
         if (settingPanelObject != null || settingPanelObject.activeSelf == true)
         {
-            musicSlider.value = SaveSystem.settingData.musicVolume;
-            sfcSlider.value = SaveSystem.settingData.sfxVolume;
-            musicText.text = SaveSystem.settingData.musicVolume.ToString() + "%";
-            sfxText.text = SaveSystem.settingData.sfxVolume.ToString() + "%";
+            musicSlider.value = soundManager.soundAudios[0].volume; // Load music sound
+            sfcSlider.value = soundManager.soundAudios[1].volume; //Load sfx sound
+            musicText.text = musicSlider.value.ToString() + "%";
+            sfxText.text = sfcSlider.value.ToString() + "%";
         }
 
     }
@@ -101,6 +93,5 @@ public Button buttonStartHost;
             sfxVolume = soundManager.soundAudios[1].volume
         };
         SaveSystem.SaveSetting(settingData);
-        SaveSystem.settingData = SaveSystem.LoadSetting();
     }
 }

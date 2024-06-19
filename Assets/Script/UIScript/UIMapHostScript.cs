@@ -1,31 +1,37 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Netcode;
-using CI.PowerConsole;
 public class UIMapHostScript : IUIScript
 {
     [Space]
     [Header("UI Attributes")]
     public Color buffColor;
     public Color failedColor;
+
+
+
+
+    //The space between each tile on keyboard
+    public float keyboardSeperateSpace = 1f;
+
+    [Header("UI Panel GameObjects")]
+    [Space]
+    [SerializeField] GameObject gameObjectMapSetting; //Map Setting Panel
+    [SerializeField] GameObject gameObjectPlayerSetting; //Player Setting Panel
+    [SerializeField] GameObject gameObjectPlayerTab; //Player Tab Panel for editing
+    [SerializeField] GameObject gameObjectModelPortfolio; // Model Portfolio showcase
+    [Header("UI Components")]
+    [SerializeField] TextMeshProUGUI textMeshNumberPlayer;
+    [SerializeField] Transform panelTablet;
     //A keyboard holding button for tiles
-    public Transform panelTablet;
-    public MapInitializeScript mapInitializeScript;
-    public List<GameObject> listButtons = new List<GameObject>();
-    public TextMeshProUGUI textMeshNumberPlayer;
-    public GameObject gameObjectMapSetting; //Map Setting Panel
-    public GameObject gameObjectPlayerSetting; //Player Setting Panel
-    public GameObject gameObjectPlayerTab; //Player Tab Panel for editing
-    public GameObject gameObjectModelPortfolio; // Model Portfolio showcase
-    public GameObject textMeshPlayerNameInput; //Input field for player name
-    public List<Button> playerTabButtons = new List<Button>(); // Player tab button
-    public List<GameObject> modelFigurePanels = new List<GameObject>(); //List of panel for model figure
+    [SerializeField] List<GameObject> listButtons = new List<GameObject>();
+    [Header("UI Interactions")]
+    [SerializeField] GameObject textMeshPlayerNameInput; //Input field for player name
+    [SerializeField] List<Button> playerTabButtons = new List<Button>(); // Player tab button
+    [SerializeField] List<GameObject> modelFigurePanels = new List<GameObject>(); //List of panel for model figure
+
     int numberplayer = 1;
     int playerIdEditing = -1;
     public List<Player> players = new List<Player>();
@@ -35,17 +41,12 @@ public class UIMapHostScript : IUIScript
     [SerializeField] GridLayoutGroup modelContentGrid;
     [SerializeField] GameObject modelFigurePanelPlaceHolder; //A placeholder panel for figure
     [SerializeField] List<GameObject> listOfFigurePanel = new List<GameObject>(); //List of figure panel when initialize
-    //List of available model figure for choosing
-    public List<GameObject> modelFigures = new List<GameObject>();
-    //List of camera that splot the model figure
-    public List<GameObject> cameraSplotOn = new List<GameObject>();
-    public List<RenderTexture> renderTextures = new List<RenderTexture>();
-    public List<RawImage> rawImages = new List<RawImage>();
-    public float spotDistance = 5f;
-    public float rotateSpeed = 5f;
-    //The space between each tile on keyboard
 
-    public float seperateSpace = 1f;
+    [Header("Reference scripts")]
+    [Space]
+    [SerializeField] MapInitializeScript mapInitializeScript;
+    [Header("Audio clips")]
+    [Space]
     public AudioClip errorClip; //Error sound
 
 
@@ -87,12 +88,12 @@ public class UIMapHostScript : IUIScript
                 //Add onclick event 
 
                 RectTransform rectTransform = newButton.GetComponent<RectTransform>();
-                horiPosition += rectTransform.sizeDelta.x + seperateSpace;
+                horiPosition += rectTransform.sizeDelta.x + keyboardSeperateSpace;
 
                 if (horiPosition >= (panel.sizeDelta.x - rectTransform.sizeDelta.x))
                 {
                     horiPosition = rectTransform.sizeDelta.x;
-                    vertPosition -= rectTransform.sizeDelta.y + seperateSpace;
+                    vertPosition -= rectTransform.sizeDelta.y + keyboardSeperateSpace;
                 }
 
                 rectTransform.anchoredPosition = new Vector2(horiPosition, vertPosition);
@@ -225,9 +226,9 @@ public class UIMapHostScript : IUIScript
     {
         GameObject button = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
         int index = Int32.Parse(button.name) - 1;
-        var platformscript = SectorTileManager.listPlatform[index].GetComponent<PlatformSectorScript>();
+        var platformscript = SectorTileManager.GetTileGameObjectAtIndexType(index).GetComponent<PlatformSectorScript>();
         int indexTile = platformscript.NextTileType();
-        SectorTileManager.listTileType[index] = indexTile;
+        SectorTileManager.SetTileType(index, indexTile);
         if (platformscript.tileIndex == 0)
         {
             listButtons[index].GetComponent<Image>().color = Color.white;
@@ -246,6 +247,10 @@ public class UIMapHostScript : IUIScript
     }
     public void OnClick_ButtonPlay()
     {
+        if(playerIdEditing!=-1)
+        {
+            OnClick_PlayerTab(playerIdEditing);
+        }
         foreach (var player in players)
         {
             if (player.modelFigureId == -1 || player.name == "")
@@ -261,7 +266,7 @@ public class UIMapHostScript : IUIScript
             players[playerIdEditing].name = textMeshPlayerNameInput.GetComponent<TMP_InputField>().text;
         }
         mapInitializeScript.SaveMapSetting();
-        mapInitializeScript.players = this.players;
+        mapInitializeScript.SetPlayerList(this);
         this.BackgroundTransistionClose(2);
     }
 }

@@ -3237,6 +3237,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1827691459}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: uiGameScript
+      value: 
+      objectReference: {fileID: 391252610}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
       propertyPath: finalWinnerClip
       value: 
       objectReference: {fileID: 8300000, guid: beee4fd33b767a14aa7ba213e35dab80, type: 3}
