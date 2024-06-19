@@ -7,11 +7,11 @@ using UnityEngine.Splines;
 public class MapInitializeScript : SectorTileManager
 {
     //Normal tile
-    GameObject _tile1;
+    [SerializeField]GameObject _tile1;
     //Buffed tile
-    GameObject _tile2;
+     [SerializeField]GameObject _tile2;
     //Failed tile
-    GameObject _tile3;
+     [SerializeField]GameObject _tile3;
     List<Player> players;
     [SerializeField] SplineContainer splineContainer;
     [Space]
@@ -63,9 +63,8 @@ public class MapInitializeScript : SectorTileManager
 
     }
 
-    public IEnumerator Slerp(Transform figure, Vector3 startPos, Vector3 endPos, Quaternion startRotation, Quaternion endRotation)
+    public static IEnumerator Slerp(Transform figure, Vector3 startPos, Vector3 endPos, Quaternion startRotation, Quaternion endRotation)
     {
-        Debug.Log("Start: " + startPos + " end: " + endPos);
         float journeyTime = 1.0f;
 
         float startTime;
@@ -89,16 +88,6 @@ public class MapInitializeScript : SectorTileManager
 
     }
 
-
-    public void UnParentChildSectorTile()
-    {
-        this.transform.parent.transform.position = new Vector3(0, 0, 0);
-        foreach (var ob in gameObjectTiles)
-        {
-
-            ob.transform.parent = null;
-        }
-    }
     public void SetPlayerList(UIMapHostScript hostScript)
     {
         players = hostScript.players;

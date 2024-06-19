@@ -39,12 +39,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     MapInitializeScript mapInitializeScript;
     [SerializeField] DiceManager diceManager;
-
-    void Start()
+    void Awake()
     {
         //Fetch prev scene script
         mapInitializeScript = FindObjectOfType<MapInitializeScript>();
-
         //Load player data
         this.players = mapInitializeScript.Players;
         foreach (var player in players)
@@ -52,8 +50,13 @@ public class GameManager : MonoBehaviour
             player.modelFigure = Instantiate(modelFigures[player.modelFigureId]);
 
         }
-        mapInitializeScript.UnParentChildSectorTile();
         ReallocatePlayerModelFigure(0, players);
+    }
+    void Start()
+    {
+
+
+
 
         StartCoroutine(GameStart());
 
@@ -118,6 +121,7 @@ public class GameManager : MonoBehaviour
             {
                 soundManager.PlaySFX(FailClip);
                 yield return StartCoroutine(uiGameScript.ShowBriefMessage("Number steps is too big!", 70));
+                playerIndex++;
                 continue;
             }
             int jumpedStep = 0;
@@ -126,8 +130,9 @@ public class GameManager : MonoBehaviour
             while (players[playerIndex].tileIndex != indexDestination)
             {
                 soundManager.PlaySFX(jumpClip);
+                players[playerIndex].modelFigure.GetComponent<Rigidbody>().isKinematic = true;
                 yield return StartCoroutine(PlayerJumpTileToTile(players[playerIndex], players[playerIndex].tileIndex + 1, jumpedStep++));
-
+                players[playerIndex].modelFigure.GetComponent<Rigidbody>().isKinematic = false;
             }
             //Check if the player is standing special tile
             //Is at final
@@ -164,8 +169,6 @@ public class GameManager : MonoBehaviour
             }
 
             playerIndex++;
-
-            //Jump player to tile
         }
         soundManager.PlaySFX(finalWinnerClip);
         yield return StartCoroutine(uiGameScript.ShowBriefMessage("Game Complete!", 70));
@@ -181,7 +184,7 @@ public class GameManager : MonoBehaviour
         soundManager.PlaySFX(jumpLevelClip[jumpedStep++]);
 
         yield return StartCoroutine(
-        mapInitializeScript.Slerp(players[playerIndex].modelFigure.transform, players[playerIndex].modelFigure.transform.position,
+        MapInitializeScript.Slerp(players[playerIndex].modelFigure.transform, players[playerIndex].modelFigure.transform.position,
         new Vector3(desJumping.x, desJumping.y, desJumping.z), players[playerIndex].modelFigure.transform.rotation, Quaternion.LookRotation(direction)));
         players[playerIndex].tileIndex = tileto;
 
@@ -198,7 +201,7 @@ public class GameManager : MonoBehaviour
 
 
     }
-    
+
     IEnumerator FinalizeScore()
     {
         gameObjectPlayerScoreBoardPanel.SetActive(true);
@@ -218,11 +221,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Start to reallocate the player model figure given when the game start
-    /// </summary>
-    /// <param name="tileIndex"></param>
-    /// <param name="listPlayer"></param>
     void ReallocatePlayerModelFigure(int tileIndex, List<Player> listPlayer)
     {
         Vector3 initialVector = mapInitializeScript.gameObjectTiles[tileIndex].transform.position;

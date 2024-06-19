@@ -1,96 +1,83 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    GameManager gameManager;
-    GameObject landmass;
-    public Transform mapTransform;
-    public Vector2 mouseDownPosition;
-    public Vector2 mouseUpPosition;
-    public Vector3 cameraOffSet = new Vector3(0, 30f, 0);
-    public Vector3 globalVector3;
-    public float smoothSpeed = 0.5f;
-    //0 is global, 1 is players, 2 single player
-    public bool[] switcher = new bool[2];
-    public int indexSwitcher = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
-        globalVector3 = this.transform.position;
-        gameManager = FindObjectOfType<GameManager>();
-        landmass = GameObject.Find("Landscape");
+    [Header("Camera Settings")]
+    [SerializeField] float moveSpeed = 0.2f;
 
-    }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] Vector3 cameraPlayerOffSet = new Vector3(0, 10, 0);
+    [SerializeField] GameObject cameraPivot;
+    [SerializeField] private float distanceToTarget = 10;
+    [SerializeField] GameManager game;
+    [SerializeField] List<Transform> listTransforms = new List<Transform>();
+    public int indexSwitcher = -1;
+    Quaternion globalRotation;
+    Vector3 globalPosition;
+    Vector3 velocity;
+
+    private void Start()
     {
-        if (indexSwitcher == 0)
+        listTransforms.Add(this.transform);
+        globalRotation = this.transform.rotation; ;
+        globalPosition = this.transform.position;
+        foreach (var player in game.GetAllPlayers())
         {
-            GlobalFocus();
-        }
-        else if (indexSwitcher == 1)
-        {
-            PlayersFocus();
-        }
-        else if (indexSwitcher == 2)
-        {
-            SinglePlayerFocus(gameManager.GetPlayerAtIndex(0).modelFigure.transform);
+            listTransforms.Add(player.modelFigure.transform);
         }
     }
 
-    void PlayersFocus()
+    private void Update()
     {
-        Bounds bounds = new Bounds(gameManager.GetPlayerAtIndex(0).modelFigure.transform.position, Vector3.zero);
-        foreach (var player in gameManager.GetAllPlayers())
+        if (indexSwitcher != -1)
+            if (Input.GetMouseButton(0))
+            {
+                if (Input.mousePosition.x < (float)Screen.width / 2f)
+                {
+                    cameraPivot.transform.localRotation= new Quaternion(0, cameraPivot.transform.localRotation.y+ (Time.deltaTime * moveSpeed * 3), 0, 0);
+                }
+                else if (Input.mousePosition.x > (float)Screen.width / 2f)
+                {
+                    cameraPivot.transform.localRotation= new Quaternion(0, cameraPivot.transform.localRotation.y- (Time.deltaTime * moveSpeed * 3), 0, 0);
+                }
+            }
+        UpdatePlayerValue();
+        ChangeFocus(indexSwitcher);
+    }
+    void ChangeFocus(int index)
+    {
+        if (indexSwitcher != -1 && indexSwitcher < listTransforms.Count)
         {
-            bounds.Encapsulate(player.modelFigure.transform.position);
-        }
-        transform.position = Vector3.Lerp(transform.position, bounds.center + cameraOffSet, smoothSpeed * Time.deltaTime);
+            if (indexSwitcher != 0)
+            {
+                if (cameraPivot.transform.parent != listTransforms[indexSwitcher].transform)
+                {
+                    cameraPivot.transform.SetParent(listTransforms[indexSwitcher]);
+                    cameraPivot.transform.localPosition = cameraPlayerOffSet;
+                    cameraPivot.transform.localRotation = new Quaternion(0, listTransforms[indexSwitcher].rotation.y, 0, 0);
+                }
 
-        SmoothLookAt(bounds.center);
+                Vector3 behindCameraPivot = cameraPivot.transform.position + (-cameraPivot.transform.forward * distanceToTarget);
+                this.transform.position = Vector3.SmoothDamp(this.transform.position, behindCameraPivot + cameraPlayerOffSet, ref velocity, Time.deltaTime * moveSpeed);
+                this.transform.LookAt(listTransforms[indexSwitcher].position);
 
-        Camera camera = GetComponent<Camera>();
-        camera.orthographicSize = bounds.extents.magnitude * 100f; 
-    }
-    
-    //Make camera travel around the map globaly
-    void GlobalFocus()
-    {
-        this.transform.position = Vector3.Lerp(this.transform.position, globalVector3, smoothSpeed * Time.deltaTime);
-        SmoothLookAt(landmass.transform.position);
-    }
-    void SinglePlayerFocus(Transform player)
-    {
-        SmoothLookAt(player.position);
-        transform.position = Vector3.Lerp(transform.position, player.position + cameraOffSet, smoothSpeed * Time.deltaTime);
-
-    }
-
-    void HandleRotation()
-    {
-        //Player camera control
-        if (Input.GetMouseButtonDown(0))
-        {
-            mouseDownPosition.x = Input.GetAxis("Mouse X");
-            mouseDownPosition.y = Input.GetAxis("Mouse Y");
+            }
+            else
+            {
+                this.transform.position = Vector3.SmoothDamp(this.transform.position, globalPosition, ref velocity, Time.deltaTime * moveSpeed); ;
+                this.transform.rotation = Quaternion.Slerp(this.transform.rotation, globalRotation, Time.deltaTime * moveSpeed);
+            }
 
         }
 
     }
-
-    private void OnApplicationQuit()
+    public void UpdatePlayerValue()
     {
-
-    }
-
-    // Smoothly look at a target object
-    void SmoothLookAt(Vector3 target)
-    {
-        // Calculate the direction to the target
-        Vector3 direction = target - transform.position;
-
-        // Smoothly rotate the camera towards the target
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), smoothSpeed * Time.deltaTime);
+        var players = game.GetAllPlayers();
+        for (int i = 1; i < listTransforms.Count; i++)
+        {
+            listTransforms[i] = players[i - 1].modelFigure.transform;
+        }
     }
 }

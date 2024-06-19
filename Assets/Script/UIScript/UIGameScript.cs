@@ -1,25 +1,39 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIGameScript : IUIScript
 {
-    public GameObject briefMessageText;
-    public GameObject forceInputUI;
-    public GameObject rollDicePanel;
-    public Slider forceSlider;
+    [Header("UI Reference")]
+    [Space]
+    [SerializeField] GameObject briefMessageText;
+    [SerializeField] GameObject forceInputUI;
+    [SerializeField] GameObject rollDicePanel;
+    [SerializeField] Slider forceSlider;
+    [SerializeField] TextMeshProUGUI forceText;
+    [SerializeField] List<Button> playerButtons;
     public float messageSecond = 2f;
-    public Vector3 mouseDown, mouseUp;
+
     bool isMouseDown = false;
-    public TextMeshProUGUI forceText;
     public float forceDrag;
-    CameraManager cameraManager;
+    public Vector3 mouseDown, mouseUp;
+    [Header("Reference scripts")]
+    [Space]
+    [SerializeField] CameraManager cameraManager;
+    [SerializeField] GameManager gameManager;
     //  is called before the first frame update
     void Start()
     {
         base.Initialize();
-        cameraManager = FindObjectOfType<CameraManager>();
+        var players = gameManager.GetAllPlayers();
+        for (int i = 0; i < players.Count; i++)
+        {
+            playerButtons[i].gameObject.SetActive(true);
+
+            playerButtons[i].gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = gameManager.GetAllPlayers()[i].name;
+        }
     }
 
 
@@ -73,14 +87,11 @@ public class UIGameScript : IUIScript
     {
         cameraManager.indexSwitcher = 0;
     }
-    public void OnClick_PlayersCamera()
+    public void OnClick_SinglePlayerCamera(int index)
     {
-        cameraManager.indexSwitcher = 1;
+        cameraManager.indexSwitcher = index;
     }
-    public void OnClick_SinglePlayerCamera()
-    {
-        cameraManager.indexSwitcher = 2;
-    }
+
     public IEnumerator ShowRollDicePanel()
     {
         forceText.gameObject.SetActive(true);
@@ -95,6 +106,8 @@ public class UIGameScript : IUIScript
             yield return null;
         }
     }
+
+
     public IEnumerator CloseRollDicePanel()
     {
         forceText.gameObject.SetActive(false);
@@ -128,7 +141,7 @@ public class UIGameScript : IUIScript
                 isMouseDown = true;
                 int distance = (int)Vector2.Distance(mouseDown, Input.mousePosition);
                 forceText.text = "Force: " + (distance > 300 ? 300 : distance).ToString() + "/300";
-                forceSlider.value = distance > 1 ? 1 : distance; // Drag distance
+                forceSlider.value = distance > 1 ? 1 : distance;
             }
             if (Input.GetMouseButtonUp(0))
             {
@@ -136,7 +149,7 @@ public class UIGameScript : IUIScript
                 //Get mouse on world space
                 mouseUp = Input.mousePosition;
                 float distance = Vector2.Distance(mouseDown, mouseUp);
-                forceSlider.value = distance > 1 ? 1 : distance; // Drag distance
+                forceSlider.value = distance > 1 ? 1 : distance;
                 forceDrag = (distance > 300 ? 300 : distance) / 4;
                 forceText.text = "";
             }

@@ -1,8 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,12 +9,10 @@ public class IUIScript : MonoBehaviour
     [Space]
     [SerializeField] Image backgroundTransistionImage;
     [SerializeField] protected SoundManager soundManager;
-    public float maxDistancedelta = 0.05f;
-    protected bool isTrasistioning = false;
+    public float maxDistancedelta = 50f;
     [Space]
     [Header("Preload Sounds")]
     [SerializeField] AudioClip clipOnClick;
-    [SerializeField] AudioClip clipTransistion;
     // Start is called before the first frame update
     protected virtual void Initialize()
     {
