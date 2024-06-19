@@ -7,7 +7,7 @@ A demo of simple table games
 - The game doesn't require nescesary packages but it need the package name "Spline" (using latest Unity Editor will automatically install the packages, if it's not installed, you can install it manually in package manager).
 - The warning encounter when running in editor is relate to new game font installed (doesn't affect to the game), typically the font doesn't fully support for all key characters so it will use some default font as replacement. Install a full support font would make it go away.
 - Prev exception was the exception related to github lfs missing file problem. Make sure you have git (with lfs) installed in your system in order to clone this project.
-- Download pre-built game (here)[]
+- Download pre-built game here: https://drive.google.com/file/d/1812Z46rCEQGvDFZYKrjy5RsK9D8Ci6qk/view?usp=drive_link
 
 ## Game Guide
 
