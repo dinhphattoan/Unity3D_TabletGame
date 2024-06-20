@@ -10,10 +10,6 @@ public class UIMapHostScript : IUIScript
     public Color buffColor;
     public Color failedColor;
 
-
-
-
-    //The space between each tile on keyboard
     public float keyboardSeperateSpace = 1f;
 
     [Header("UI Panel GameObjects")]
@@ -28,9 +24,9 @@ public class UIMapHostScript : IUIScript
     //A keyboard holding button for tiles
     [SerializeField] List<GameObject> listButtons = new List<GameObject>();
     [Header("UI Interactions")]
-    [SerializeField] GameObject textMeshPlayerNameInput; //Input field for player name
-    [SerializeField] List<Button> playerTabButtons = new List<Button>(); // Player tab button
-    [SerializeField] List<GameObject> modelFigurePanels = new List<GameObject>(); //List of panel for model figure
+    [SerializeField] GameObject textMeshPlayerNameInput; 
+    [SerializeField] List<Button> playerTabButtons = new List<Button>(); 
+    [SerializeField] List<GameObject> modelFigurePanels = new List<GameObject>(); 
 
     int numberplayer = 1;
     int playerIdEditing = -1;
@@ -39,8 +35,8 @@ public class UIMapHostScript : IUIScript
     [Header("Model Figure")]
     [Space]
     [SerializeField] GridLayoutGroup modelContentGrid;
-    [SerializeField] GameObject modelFigurePanelPlaceHolder; //A placeholder panel for figure
-    [SerializeField] List<GameObject> listOfFigurePanel = new List<GameObject>(); //List of figure panel when initialize
+    [SerializeField] GameObject modelFigurePanelPlaceHolder;
+    [SerializeField] List<GameObject> listOfFigurePanel = new List<GameObject>();
 
     [Header("Reference scripts")]
     [Space]
@@ -59,7 +55,6 @@ public class UIMapHostScript : IUIScript
         mapInitializeScript.InitTiles();
     }
 
-    // Update is called once per frame
     void Update()
     {
 

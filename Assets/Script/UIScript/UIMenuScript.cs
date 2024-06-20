@@ -15,8 +15,6 @@ public class UIMenuScript : IUIScript
     [SerializeField] GameObject gameObjectPlayerPanelContent;
     [SerializeField] GameObject gameObjectScoreBoardLabel;
 
-    //Interaction home menuu
-
     [Header("Text objects")]
     [SerializeField] TextMeshProUGUI musicText;
     [SerializeField] TextMeshProUGUI sfxText;

@@ -30,8 +30,6 @@ public class DiceManager : MonoBehaviour
     {
         diceValue = GetDiceValue();
     }
-
-    //Start rolling the dice from the force apply on the dice
     public IEnumerator RollDiceOnForce(float draggedForce, Vector2 mouseDown, Vector2 mouseUp)
     {
         ResetPosition();

@@ -8,7 +8,6 @@ public class SectorTileManager : MonoBehaviour
     protected static GameObject tile1;
     protected static GameObject tile2;
     protected static GameObject tile3;
-    //List of choosen tiles from player
     protected static List<int> listTileType = new List<int>();
 
     [SerializeField] protected static List<GameObject> listPlatform = new List<GameObject>();

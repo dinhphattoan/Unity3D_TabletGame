@@ -13,7 +13,6 @@ public class IUIScript : MonoBehaviour
     [Space]
     [Header("Preload Sounds")]
     [SerializeField] AudioClip clipOnClick;
-    // Start is called before the first frame update
     protected virtual void Initialize()
     {
         soundManager = FindAnyObjectByType<SoundManager>();

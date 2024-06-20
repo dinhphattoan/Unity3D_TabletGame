@@ -6,8 +6,8 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    private static SettingData settingData = new SettingData();
-    private static List<ScoreboardData> scoreboardDatas = new List<ScoreboardData>();
+    private static SettingData settingData;
+    private static List<ScoreboardData> scoreboardDatas;
     //Save game setting locally
     public static void SaveSetting(SettingData settingData)
     {
@@ -23,6 +23,7 @@ public static class SaveSystem
         string path = Application.persistentDataPath + "/scoreboard.data";
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream;
+        scoreboardDatas= new List<ScoreboardData>();
         if (File.Exists(path))
         {
 
@@ -41,6 +42,7 @@ public static class SaveSystem
         string path = Application.persistentDataPath + "/scoreboard.data";
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream;
+        scoreboardDatas= new List<ScoreboardData>();
         if (File.Exists(path))
         {
 

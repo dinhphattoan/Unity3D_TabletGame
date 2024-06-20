@@ -46,8 +46,17 @@ public class UIGameScript : IUIScript
 
         }
     }
-
-    public IEnumerator ClickToContinue(string message, int frontSize)
+ public IEnumerator ClickToContinue(string message, int frontSize)
+    {
+        var fronttemp = briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize;
+        briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize = frontSize;
+        briefMessageText.transform.GetComponent<TextMeshProUGUI>().text = message;
+        briefMessageText.gameObject.SetActive(true);
+        yield return new WaitUntil(() => Input.GetMouseButton(0));
+        briefMessageText.gameObject.SetActive(false);
+        briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize = fronttemp;
+    }
+    public IEnumerator SpaceToContinue(string message, int frontSize)
     {
         var fronttemp = briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize;
         briefMessageText.transform.GetComponent<TextMeshProUGUI>().fontSize = frontSize;

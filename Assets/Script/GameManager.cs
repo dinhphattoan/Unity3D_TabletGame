@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<Player> players = new List<Player>();
 
     [SerializeField] List<GameObject> modelFigures = new List<GameObject>();
-    //Determine the turn order of the players to play the game
     [Header("UI Panels")]
     [Space]
-    [SerializeField] GameObject gameObjectPlayerScoreBoardPanel; //Scoreboard Panel
-    [SerializeField] GameObject gameObjectScoreBoardContent; // Content of the scoreboard
-    [SerializeField] GameObject gameObjectScoreBoardPlayerPanel; //Player panel
+    [SerializeField] GameObject gameObjectPlayerScoreBoardPanel; 
+    [SerializeField] GameObject gameObjectScoreBoardContent;
+    [SerializeField] GameObject gameObjectScoreBoardPlayerPanel; 
 
     [Header("In Game System Attributes")]
 
@@ -40,11 +39,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     MapInitializeScript mapInitializeScript;
     [SerializeField] DiceManager diceManager;
+    [SerializeField] CameraManager cameraManager;
     void Awake()
     {
-        //Fetch prev scene script
         mapInitializeScript = FindObjectOfType<MapInitializeScript>();
-        //Load player data
         this.players = mapInitializeScript.Players;
         foreach (var player in players)
         {
@@ -89,19 +87,22 @@ public class GameManager : MonoBehaviour
             }
 
             soundManager.PlaySFX(transistionClip);
-            yield return StartCoroutine(uiGameScript.ClickToContinue("Player " + players[playerIndex].name + " turn!\nPress Space to continue", 40));
+            if (Application.isMobilePlatform)
+            {
+                yield return StartCoroutine(uiGameScript.ClickToContinue("Player " + players[playerIndex].name, 40));
+            }
+            else
+                yield return StartCoroutine(uiGameScript.SpaceToContinue("Player " + players[playerIndex].name + " turn!\nPress Space to continue", 40));
             players[playerIndex].turns++;
-
+            if (cameraManager.indexSwitcher != 0)
+                cameraManager.indexSwitcher = playerIndex+1;
             yield return new WaitForSeconds(1);
 
 
-
+            cameraManager.isInput = false;
             while (true)
             {
-
-                //Wait for Input force from player
                 yield return StartCoroutine(HandleInputForce());
-                //Wait for the dice to roll
                 yield return StartCoroutine(diceManager.RollDiceOnForce(force, uiGameScript.mouseDown, uiGameScript.mouseUp));
                 if (diceManager.GetDiceValue() == -1)
                 {
@@ -115,7 +116,7 @@ public class GameManager : MonoBehaviour
                 }
 
             }
-            //Get the dice result
+            cameraManager.isInput = true;
             int diceValue = diceManager.GetDiceValue();
             int indexDestination = diceValue + players[playerIndex].tileIndex;
             if (indexDestination > SectorTileManager.GetTileCount() - 1)
@@ -128,7 +129,6 @@ public class GameManager : MonoBehaviour
             }
             int jumpedStep = 0;
             diceManager.ResetPosition();
-            //Assign from-to destination
             while (players[playerIndex].tileIndex != indexDestination)
             {
                 soundManager.PlaySFX(jumpClip);
@@ -136,8 +136,6 @@ public class GameManager : MonoBehaviour
                 yield return StartCoroutine(PlayerJumpTileToTile(players[playerIndex], players[playerIndex].tileIndex + 1, jumpedStep++));
                 players[playerIndex].modelFigure.GetComponent<Rigidbody>().isKinematic = false;
             }
-            //Check if the player is standing special tile
-            //Is at final
             if (players[playerIndex].tileIndex == SectorTileManager.GetTileCount() - 1)
             {
                 soundManager.PlaySFX(winnerClip);
@@ -147,7 +145,6 @@ public class GameManager : MonoBehaviour
                 winnerCount++;
                 continue;
             }
-            //Buff tile
 
             if (SectorTileManager.GetTileTypeAtIndex(players[playerIndex].tileIndex) == 1)
             {
@@ -196,7 +193,6 @@ public class GameManager : MonoBehaviour
     {
         uiGameScript.ShowForceInputUI();
         yield return StartCoroutine(uiGameScript.ShowRollDicePanel());
-        //Pending for input force
         yield return StartCoroutine(uiGameScript.ForceInput());
         force = uiGameScript.forceDrag;
         uiGameScript.HideForceInputUI();
@@ -207,7 +203,7 @@ public class GameManager : MonoBehaviour
     IEnumerator FinalizeScore()
     {
         gameObjectPlayerScoreBoardPanel.SetActive(true);
-        //Sort the player from high to low base on ranking score
+
         players = players.OrderBy(x => x.rank).ToList();
         ScoreboardData scoreboardData = new ScoreboardData();
         for (int i = 0; i < players.Count; i++)
@@ -256,10 +252,8 @@ public class Player
     public int failTimes;
     public int buffTimes;
     public bool isWon = false;
-    public Player()
-    {
+    public Player(){}
 
-    }
     public Player(string name, int tileIndex, int score, int turns, int failTimes, int buffTimes)
     {
         this.name = name;

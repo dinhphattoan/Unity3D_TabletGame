@@ -2205,6 +2205,7 @@ MonoBehaviour:
   distanceToTarget: 32
   game: {fileID: 1786240770}
   listTransforms: []
+  isInput: 0
   indexSwitcher: 0
 --- !u!1 &1207789947
 GameObject:
@@ -4682,6 +4683,10 @@ PrefabInstance:
       propertyPath: uiGameScript
       value: 
       objectReference: {fileID: 391252610}
+    - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
+      propertyPath: cameraManager
+      value: 
+      objectReference: {fileID: 1165133857}
     - target: {fileID: 6298253995114577594, guid: 4c0fbd3139d8a0146a74d6c59765c112, type: 3}
       propertyPath: finalWinnerClip
       value: 

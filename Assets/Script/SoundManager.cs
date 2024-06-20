@@ -6,20 +6,14 @@ using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
-    //Queue of audios added and play in order
     [SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
     [SerializeField] int currentClipIndex = 0;
     [SerializeField] Slider soundSlider;
-    //List of audio available, 1 for music, 2 for sfx sound
-    [SerializeField]
     public List<SoundAudio> soundAudios;
-    //Transistion speed
     float transistionSecondSpeedClose = 1f;
     float transistionSecondSpeedOpen = 1f;
     bool isTransistionProcess = false;
-    //Transistion counter
     float transistionSecondCounter = 0;
-    //Save the previous sound volume set when start transistion the volume
     float prevSoundVolume = 0;
     [SerializeField] AudioSource audioSource; //Music audio source
     [SerializeField] AudioSource audioSource2; //SFX audio source
@@ -28,7 +22,6 @@ public class SoundManager : MonoBehaviour
     {
 
     }
-    //Play the next song (transistioning), if flag is false then no next song will be played
     public void PlayNextSong(bool flag)
     {
         if (!flag)

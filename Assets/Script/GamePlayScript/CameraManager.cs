@@ -12,11 +12,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float distanceToTarget = 10;
     [SerializeField] GameManager game;
     [SerializeField] List<Transform> listTransforms = new List<Transform>();
+    public bool isInput = false;
     public int indexSwitcher = -1;
     Quaternion globalRotation;
     Vector3 globalPosition;
     Vector3 velocity;
-    Vector3 prevMouseDown=Vector3.zero;
+    Vector3 prevMouseDown = Vector3.zero;
     private void Start()
     {
         listTransforms.Add(this.transform);
@@ -30,18 +31,22 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetMouseButton(0))
+        if (isInput)
         {
-            if(prevMouseDown.x<Input.mousePosition.x)
+            if (Input.GetMouseButton(0))
             {
-                cameraPivot.transform.Rotate(Vector3.down,3);
+                if (prevMouseDown.x < Input.mousePosition.x)
+                {
+                    cameraPivot.transform.Rotate(Vector3.down, 3);
+                }
+                else if (prevMouseDown.x > Input.mousePosition.x)
+                {
+                    cameraPivot.transform.Rotate(Vector3.up, 3);
+                }
+                prevMouseDown = Input.mousePosition; ;
             }
-            else if ( prevMouseDown.x > Input.mousePosition.x)
-            {
-                cameraPivot.transform.Rotate(Vector3.up,3);
-            }
-            prevMouseDown=Input.mousePosition;;
         }
+
         UpdatePlayerValue();
         ChangeFocus(indexSwitcher);
     }
