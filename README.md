@@ -39,11 +39,11 @@
 - When step on the fail tile, player fall back 3 tile, and continue to fall if they keep stepping on the same, fall on the buff tile will not activate it.
 - In order the reach to end, player have to roll the dice with exact value of step they going to jump.
 ## Game Preview
-![Host new map](images/mapsetting.png){width="300px" height="200px"}
-![Set up player](images/charactersetting.png){width="300px" height="200px"}
-![Road Map](images/map.png){width="300px" height="200px"}
-![Roll dice](images/rolldice.png){width="300px" height="200px"}
-![Gameplay](images/gameplay.png){width="300px" height="200px"}
+![Host new map](images/mapsetting.png)
+![Set up player](images/charactersetting.png)
+![Road Map](images/map.png)
+![Roll dice](images/rolldice.png)
+![Gameplay](images/gameplay.png)
 ## Future planning
 - Adding more challenges, which play significant impact and improce the game experiences
 - Adding number of tiles set in map setting.
