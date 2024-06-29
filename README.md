@@ -38,7 +38,12 @@
 - When step on the buff tile, gain one more turn, this bonus turn will not addup to the player turn counts.
 - When step on the fail tile, player fall back 3 tile, and continue to fall if they keep stepping on the same, fall on the buff tile will not activate it.
 - In order the reach to end, player have to roll the dice with exact value of step they going to jump.
-
+## Game Preview
+![Host new map](images/mapsetting.png)
+![Set up player](images/charactersetting.png)
+![Road Map](images/map.png)
+![Roll dice](images/rolldice.png)
+![Gameplay](images/gameplay.png)
 ## Future planning
 - Adding more challenges, which play significant impact and improce the game experiences
 - Adding number of tiles set in map setting.
